@@ -1,10 +1,14 @@
+// core
 import { Injectable } from '@nestjs/common';
+
+// schemas
+import { Schedule } from './schedule.model';
 
 @Injectable()
 export class SchedulesService {
-  private schedules = [];
+  private schedules: Schedule[] = [];
 
-  getAllSchedules() {
+  getAllSchedules(): Schedule[] {
     return this.schedules;
   }
 }
