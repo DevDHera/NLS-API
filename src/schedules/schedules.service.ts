@@ -25,10 +25,8 @@ export class SchedulesService {
     }
 
     if (search) {
-      schedules = schedules.filter(
-        (schedule) =>
-          schedule.title.includes(search) ||
-          schedule.scheduledDate.includes(search),
+      schedules = schedules.filter((schedule) =>
+        schedule.title.includes(search),
       );
     }
 

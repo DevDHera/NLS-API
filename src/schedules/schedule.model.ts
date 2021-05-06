@@ -1,6 +1,6 @@
 export interface Schedule {
   id: string;
-  scheduledDate: string;
+  scheduledDate: Date;
   title: string;
   status: ScheduleStatus;
 }

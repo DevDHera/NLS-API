@@ -5,9 +5,9 @@ import { ApiProperty } from '@nestjs/swagger';
 import { ScheduleStatus } from '../schedule.model';
 
 export class GetSchedulesFilterDto {
-  @ApiProperty()
+  @ApiProperty({ required: false, enum: ScheduleStatus })
   status: ScheduleStatus;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   search: string;
 }

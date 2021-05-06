@@ -8,6 +8,8 @@ import {
   Patch,
   Post,
   Query,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 
 // services
@@ -36,6 +38,7 @@ export class SchedulesController {
   }
 
   @Post()
+  @UsePipes(ValidationPipe)
   createSchedule(@Body() createScheduleDto: CreateScheduleDto) {
     return this.schedulesService.createSchedule(createScheduleDto);
   }
