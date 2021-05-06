@@ -5,6 +5,7 @@ import { v1 as uuid } from 'uuid';
 // schemas
 import { Schedule, ScheduleStatus } from './schedule.model';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
+import { GetSchedulesFilterDto } from './dto/get-schedules-filter.dto';
 
 @Injectable()
 export class SchedulesService {
@@ -12,6 +13,26 @@ export class SchedulesService {
 
   getAllSchedules(): Schedule[] {
     return this.schedules;
+  }
+
+  getSchedulesWithFilters(filterDto: GetSchedulesFilterDto): Schedule[] {
+    const { status, search } = filterDto;
+
+    let schedules = this.getAllSchedules();
+
+    if (status) {
+      schedules = schedules.filter((schedule) => schedule.status === status);
+    }
+
+    if (search) {
+      schedules = schedules.filter(
+        (schedule) =>
+          schedule.title.includes(search) ||
+          schedule.scheduledDate.includes(search),
+      );
+    }
+
+    return schedules;
   }
 
   getScheduleById(id: string): Schedule {

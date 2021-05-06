@@ -7,6 +7,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 
 // services
@@ -15,13 +16,17 @@ import { SchedulesService } from './schedules.service';
 // schemas
 import { Schedule, ScheduleStatus } from './schedule.model';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
+import { GetSchedulesFilterDto } from './dto/get-schedules-filter.dto';
 
 @Controller('schedules')
 export class SchedulesController {
   constructor(private schedulesService: SchedulesService) {}
 
   @Get()
-  getAllSchedules(): Schedule[] {
+  getSchedules(@Query() filterDto: GetSchedulesFilterDto): Schedule[] {
+    if (Object.keys(filterDto).length) {
+      return this.schedulesService.getSchedulesWithFilters(filterDto);
+    }
     return this.schedulesService.getAllSchedules();
   }
 
