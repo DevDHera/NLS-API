@@ -1,6 +1,7 @@
 {
     "conventionalCommits.scopes": [
         "schedules",
-        "base"
+        "base",
+        "orm"
     ]
 }

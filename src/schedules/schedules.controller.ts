@@ -5,6 +5,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Query,
@@ -16,12 +17,13 @@ import {
 import { SchedulesService } from './schedules.service';
 
 // schemas
-import { Schedule, ScheduleStatus } from './schedule.model';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { GetSchedulesFilterDto } from './dto/get-schedules-filter.dto';
 
 // pipes
 import { ScheduleStatusValidationPipe } from './pipes/schedule-status-validation.pipe';
+import { Schedule } from './schedule.entity';
+import { ScheduleStatus } from './schedule-status.enums';
 
 @Controller('schedules')
 export class SchedulesController {
@@ -30,34 +32,33 @@ export class SchedulesController {
   @Get()
   getSchedules(
     @Query(ValidationPipe) filterDto: GetSchedulesFilterDto,
-  ): Schedule[] {
-    if (Object.keys(filterDto).length) {
-      return this.schedulesService.getSchedulesWithFilters(filterDto);
-    }
-    return this.schedulesService.getAllSchedules();
+  ): Promise<Schedule[]> {
+    return this.schedulesService.getSchedules(filterDto);
   }
 
   @Get('/:id')
-  getScheduleById(@Param('id') id: string): Schedule {
+  getScheduleById(@Param('id', ParseIntPipe) id: number): Promise<Schedule> {
     return this.schedulesService.getScheduleById(id);
   }
 
   @Post()
   @UsePipes(ValidationPipe)
-  createSchedule(@Body() createScheduleDto: CreateScheduleDto) {
+  createSchedule(
+    @Body() createScheduleDto: CreateScheduleDto,
+  ): Promise<Schedule> {
     return this.schedulesService.createSchedule(createScheduleDto);
   }
 
   @Delete('/:id')
-  deleteSchedule(@Param('id') id: string): void {
+  deleteSchedule(@Param('id', ParseIntPipe) id: number): Promise<void> {
     return this.schedulesService.deleteSchedule(id);
   }
 
   @Patch('/:id/status')
   updateScheduleStatus(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body('status', ScheduleStatusValidationPipe) status: ScheduleStatus,
-  ): Schedule {
+  ): Promise<Schedule> {
     return this.schedulesService.updateScheduleStatus(id, status);
   }
 }

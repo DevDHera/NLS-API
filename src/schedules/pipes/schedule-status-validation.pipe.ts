@@ -2,7 +2,7 @@
 import { BadRequestException, PipeTransform } from '@nestjs/common';
 
 // schemas
-import { ScheduleStatus } from '../schedule.model';
+import { ScheduleStatus } from '../schedule-status.enums';
 
 export class ScheduleStatusValidationPipe implements PipeTransform {
   readonly allowedStatus = [
