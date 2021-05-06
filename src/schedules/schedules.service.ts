@@ -32,4 +32,8 @@ export class SchedulesService {
 
     return schedule;
   }
+
+  deleteSchedule(id: string): void {
+    this.schedules = this.schedules.filter((schedule) => schedule.id !== id);
+  }
 }
