@@ -1,5 +1,5 @@
 // core
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { v1 as uuid } from 'uuid';
 
 // schemas
@@ -34,7 +34,13 @@ export class SchedulesService {
   }
 
   getScheduleById(id: string): Schedule {
-    return this.schedules.find((schedule) => schedule.id === id);
+    const schedule = this.schedules.find((schedule) => schedule.id === id);
+
+    if (!schedule) {
+      throw new NotFoundException();
+    }
+
+    return schedule;
   }
 
   createSchedule(createScheduleDto: CreateScheduleDto): Schedule {
@@ -53,7 +59,8 @@ export class SchedulesService {
   }
 
   deleteSchedule(id: string): void {
-    this.schedules = this.schedules.filter((schedule) => schedule.id !== id);
+    const schedule = this.getScheduleById(id);
+    this.schedules = this.schedules.filter((s) => s.id !== schedule.id);
   }
 
   updateScheduleStatus(id: string, status: ScheduleStatus): Schedule {

@@ -20,6 +20,9 @@ import { Schedule, ScheduleStatus } from './schedule.model';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { GetSchedulesFilterDto } from './dto/get-schedules-filter.dto';
 
+// pipes
+import { ScheduleStatusValidationPipe } from './pipes/schedule-status-validation.pipe';
+
 @Controller('schedules')
 export class SchedulesController {
   constructor(private schedulesService: SchedulesService) {}
@@ -51,7 +54,7 @@ export class SchedulesController {
   @Patch('/:id/status')
   updateScheduleStatus(
     @Param('id') id: string,
-    @Body('status') status: ScheduleStatus,
+    @Body('status', ScheduleStatusValidationPipe) status: ScheduleStatus,
   ): Schedule {
     return this.schedulesService.updateScheduleStatus(id, status);
   }
