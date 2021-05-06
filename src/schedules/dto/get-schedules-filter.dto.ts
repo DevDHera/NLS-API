@@ -3,7 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsNotEmpty, IsOptional } from 'class-validator';
 
 // schemas
-import { ScheduleStatus } from '../schedule.model';
+import { ScheduleStatus } from '../schedule-status.enums';
 
 export class GetSchedulesFilterDto {
   @ApiProperty({ required: false, enum: ScheduleStatus })

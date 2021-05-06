@@ -1,71 +1,57 @@
 // core
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { v1 as uuid } from 'uuid';
+import { InjectRepository } from '@nestjs/typeorm';
 
 // schemas
-import { Schedule, ScheduleStatus } from './schedule.model';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { GetSchedulesFilterDto } from './dto/get-schedules-filter.dto';
+import { ScheduleStatus } from './schedule-status.enums';
+import { Schedule } from './schedule.entity';
+import { ScheduleRepository } from './schedule.repository';
 
 @Injectable()
 export class SchedulesService {
-  private schedules: Schedule[] = [];
+  constructor(
+    @InjectRepository(ScheduleRepository)
+    private scheduleRepository: ScheduleRepository,
+  ) {}
 
-  getAllSchedules(): Schedule[] {
-    return this.schedules;
+  async getSchedules(filterDto: GetSchedulesFilterDto): Promise<Schedule[]> {
+    return this.scheduleRepository.getSchedules(filterDto);
   }
 
-  getSchedulesWithFilters(filterDto: GetSchedulesFilterDto): Schedule[] {
-    const { status, search } = filterDto;
-
-    let schedules = this.getAllSchedules();
-
-    if (status) {
-      schedules = schedules.filter((schedule) => schedule.status === status);
-    }
-
-    if (search) {
-      schedules = schedules.filter((schedule) =>
-        schedule.title.includes(search),
-      );
-    }
-
-    return schedules;
-  }
-
-  getScheduleById(id: string): Schedule {
-    const schedule = this.schedules.find((schedule) => schedule.id === id);
+  async getScheduleById(id: number): Promise<Schedule> {
+    const schedule = await this.scheduleRepository.findOne(id);
 
     if (!schedule) {
-      throw new NotFoundException();
+      throw new NotFoundException(`Schedule with id ${id} not found`);
     }
 
     return schedule;
   }
 
-  createSchedule(createScheduleDto: CreateScheduleDto): Schedule {
-    const { scheduledDate, title } = createScheduleDto;
-
-    const schedule: Schedule = {
-      id: uuid(),
-      scheduledDate,
-      title,
-      status: ScheduleStatus.INITIATED,
-    };
-
-    this.schedules.push(schedule);
-
-    return schedule;
+  async createSchedule(
+    createScheduleDto: CreateScheduleDto,
+  ): Promise<Schedule> {
+    return this.scheduleRepository.createSchedule(createScheduleDto);
   }
 
-  deleteSchedule(id: string): void {
-    const schedule = this.getScheduleById(id);
-    this.schedules = this.schedules.filter((s) => s.id !== schedule.id);
+  async deleteSchedule(id: number): Promise<void> {
+    const result = await this.scheduleRepository.delete(id);
+
+    if (result.affected === 0) {
+      throw new NotFoundException(`Schedule with id ${id} not found`);
+    }
   }
 
-  updateScheduleStatus(id: string, status: ScheduleStatus): Schedule {
-    const schedule = this.getScheduleById(id);
+  async updateScheduleStatus(
+    id: number,
+    status: ScheduleStatus,
+  ): Promise<Schedule> {
+    const schedule = await this.getScheduleById(id);
     schedule.status = status;
+    await schedule.save();
+
     return schedule;
   }
 }
