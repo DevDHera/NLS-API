@@ -28,7 +28,9 @@ export class SchedulesController {
   constructor(private schedulesService: SchedulesService) {}
 
   @Get()
-  getSchedules(@Query() filterDto: GetSchedulesFilterDto): Schedule[] {
+  getSchedules(
+    @Query(ValidationPipe) filterDto: GetSchedulesFilterDto,
+  ): Schedule[] {
     if (Object.keys(filterDto).length) {
       return this.schedulesService.getSchedulesWithFilters(filterDto);
     }
