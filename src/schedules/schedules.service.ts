@@ -36,4 +36,10 @@ export class SchedulesService {
   deleteSchedule(id: string): void {
     this.schedules = this.schedules.filter((schedule) => schedule.id !== id);
   }
+
+  updateScheduleStatus(id: string, status: ScheduleStatus): Schedule {
+    const schedule = this.getScheduleById(id);
+    schedule.status = status;
+    return schedule;
+  }
 }

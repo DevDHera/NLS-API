@@ -1,11 +1,19 @@
 // core
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 
 // services
 import { SchedulesService } from './schedules.service';
 
 // schemas
-import { Schedule } from './schedule.model';
+import { Schedule, ScheduleStatus } from './schedule.model';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
 
 @Controller('schedules')
@@ -30,5 +38,13 @@ export class SchedulesController {
   @Delete('/:id')
   deleteSchedule(@Param('id') id: string): void {
     return this.schedulesService.deleteSchedule(id);
+  }
+
+  @Patch('/:id/status')
+  updateScheduleStatus(
+    @Param('id') id: string,
+    @Body('status') status: ScheduleStatus,
+  ): Schedule {
+    return this.schedulesService.updateScheduleStatus(id, status);
   }
 }
