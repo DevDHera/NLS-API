@@ -14,6 +14,10 @@ export class SchedulesService {
     return this.schedules;
   }
 
+  getScheduleById(id: string): Schedule {
+    return this.schedules.find((schedule) => schedule.id === id);
+  }
+
   createSchedule(createScheduleDto: CreateScheduleDto): Schedule {
     const { scheduledDate, title } = createScheduleDto;
 
