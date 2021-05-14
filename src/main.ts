@@ -18,7 +18,6 @@ async function bootstrap() {
       'API for NIBM Lecturer System - Bloodline behind NLS-PWA 💪',
     )
     .setVersion('1.0')
-    .addTag('schedules')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
