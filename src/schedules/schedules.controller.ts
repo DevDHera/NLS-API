@@ -12,6 +12,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 // services
 import { SchedulesService } from './schedules.service';
@@ -25,6 +26,7 @@ import { ScheduleStatusValidationPipe } from './pipes/schedule-status-validation
 import { Schedule } from './schedule.entity';
 import { ScheduleStatus } from './schedule-status.enums';
 
+@ApiTags('Schedules')
 @Controller('schedules')
 export class SchedulesController {
   constructor(private schedulesService: SchedulesService) {}
