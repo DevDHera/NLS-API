@@ -36,9 +36,9 @@ export class ScheduleRepository extends Repository<Schedule> {
       return schedules;
     } catch (error) {
       this.logger.error(
-        `Failed to get schedules for user: ${
-          user.username
-        }. DTO: ${JSON.stringify(filterDto)}`,
+        `Failed to get schedules for user: ${user.email}. DTO: ${JSON.stringify(
+          filterDto,
+        )}`,
         error.stack,
       );
       throw new InternalServerErrorException();
@@ -62,7 +62,7 @@ export class ScheduleRepository extends Repository<Schedule> {
     } catch (error) {
       this.logger.error(
         `Failed to create a schedule for user: ${
-          user.username
+          user.email
         }. Data: ${JSON.stringify(createScheduleDto)}`,
         error.stack,
       );

@@ -47,9 +47,9 @@ export class SchedulesController {
     @GetUser() user: User,
   ): Promise<Schedule[]> {
     this.logger.verbose(
-      `User: ${
-        user.username
-      } retrieving all schedules. Filters: ${JSON.stringify(filterDto)}`,
+      `User: ${user.email} retrieving all schedules. Filters: ${JSON.stringify(
+        filterDto,
+      )}`,
     );
     return this.schedulesService.getSchedules(filterDto, user);
   }
@@ -69,7 +69,7 @@ export class SchedulesController {
     @GetUser() user: User,
   ): Promise<Schedule> {
     this.logger.verbose(
-      `User: ${user.username} creating a new schedule. Data: ${JSON.stringify(
+      `User: ${user.email} creating a new schedule. Data: ${JSON.stringify(
         createScheduleDto,
       )}`,
     );
