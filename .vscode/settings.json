@@ -3,6 +3,7 @@
         "schedules",
         "base",
         "orm",
-        "auth"
+        "auth",
+        "ci/cd"
     ]
 }
