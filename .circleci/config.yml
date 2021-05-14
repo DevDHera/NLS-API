@@ -24,7 +24,7 @@ aliases:
     save_cache:
       paths:
         - node_modules
-      key: app-{{ checksum "package.json" }}  
+      key: app-{{ checksum "package.json" }}
   - &run-tests
     run:
       name: Run tests
@@ -46,7 +46,6 @@ jobs:
     steps:
       - checkout
       - *show-current-branch-name
-      - *install-aws-cli
       - *run-tests
 workflows:
   build-and-test:
