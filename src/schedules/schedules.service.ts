@@ -7,6 +7,7 @@ import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { GetSchedulesFilterDto } from './dto/get-schedules-filter.dto';
 import { ScheduleStatus } from './schedule-status.enums';
 import { Schedule } from './schedule.entity';
+import { User } from '../auth/user.entity';
 import { ScheduleRepository } from './schedule.repository';
 
 @Injectable()
@@ -16,12 +17,17 @@ export class SchedulesService {
     private scheduleRepository: ScheduleRepository,
   ) {}
 
-  async getSchedules(filterDto: GetSchedulesFilterDto): Promise<Schedule[]> {
-    return this.scheduleRepository.getSchedules(filterDto);
+  async getSchedules(
+    filterDto: GetSchedulesFilterDto,
+    user: User,
+  ): Promise<Schedule[]> {
+    return this.scheduleRepository.getSchedules(filterDto, user);
   }
 
-  async getScheduleById(id: number): Promise<Schedule> {
-    const schedule = await this.scheduleRepository.findOne(id);
+  async getScheduleById(id: number, user: User): Promise<Schedule> {
+    const schedule = await this.scheduleRepository.findOne({
+      where: { id, userId: user.id },
+    });
 
     if (!schedule) {
       throw new NotFoundException(`Schedule with id ${id} not found`);
@@ -32,12 +38,16 @@ export class SchedulesService {
 
   async createSchedule(
     createScheduleDto: CreateScheduleDto,
+    user: User,
   ): Promise<Schedule> {
-    return this.scheduleRepository.createSchedule(createScheduleDto);
+    return this.scheduleRepository.createSchedule(createScheduleDto, user);
   }
 
-  async deleteSchedule(id: number): Promise<void> {
-    const result = await this.scheduleRepository.delete(id);
+  async deleteSchedule(id: number, user: User): Promise<void> {
+    const result = await this.scheduleRepository.delete({
+      id,
+      userId: user.id,
+    });
 
     if (result.affected === 0) {
       throw new NotFoundException(`Schedule with id ${id} not found`);
@@ -47,8 +57,9 @@ export class SchedulesService {
   async updateScheduleStatus(
     id: number,
     status: ScheduleStatus,
+    user: User,
   ): Promise<Schedule> {
-    const schedule = await this.getScheduleById(id);
+    const schedule = await this.getScheduleById(id, user);
     schedule.status = status;
     await schedule.save();
 

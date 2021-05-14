@@ -1,8 +1,15 @@
 // core
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 // schemas
 import { ScheduleStatus } from './schedule-status.enums';
+import { User } from '../auth/user.entity';
 
 @Entity()
 export class Schedule extends BaseEntity {
@@ -17,4 +24,10 @@ export class Schedule extends BaseEntity {
 
   @Column()
   status: ScheduleStatus;
+
+  @ManyToOne((type) => User, (user) => user.schedules, { eager: false })
+  user: User;
+
+  @Column()
+  userId: number;
 }
