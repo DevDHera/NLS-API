@@ -7,6 +7,7 @@ import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { GetSchedulesFilterDto } from './dto/get-schedules-filter.dto';
 import { ScheduleStatus } from './schedule-status.enums';
 import { Schedule } from './schedule.entity';
+import { User } from '../auth/user.entity';
 import { ScheduleRepository } from './schedule.repository';
 
 @Injectable()
@@ -32,8 +33,9 @@ export class SchedulesService {
 
   async createSchedule(
     createScheduleDto: CreateScheduleDto,
+    user: User,
   ): Promise<Schedule> {
-    return this.scheduleRepository.createSchedule(createScheduleDto);
+    return this.scheduleRepository.createSchedule(createScheduleDto, user);
   }
 
   async deleteSchedule(id: number): Promise<void> {

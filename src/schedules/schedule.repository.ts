@@ -3,6 +3,7 @@ import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { GetSchedulesFilterDto } from './dto/get-schedules-filter.dto';
 import { ScheduleStatus } from './schedule-status.enums';
 import { Schedule } from './schedule.entity';
+import { User } from '../auth/user.entity';
 
 @EntityRepository(Schedule)
 export class ScheduleRepository extends Repository<Schedule> {
@@ -27,6 +28,7 @@ export class ScheduleRepository extends Repository<Schedule> {
 
   async createSchedule(
     createScheduleDto: CreateScheduleDto,
+    user: User,
   ): Promise<Schedule> {
     const { scheduledDate, title } = createScheduleDto;
 
@@ -34,7 +36,10 @@ export class ScheduleRepository extends Repository<Schedule> {
     schedule.scheduledDate = scheduledDate;
     schedule.title = title;
     schedule.status = ScheduleStatus.INITIATED;
+    schedule.user = user;
     await schedule.save();
+
+    delete schedule.user;
 
     return schedule;
   }
