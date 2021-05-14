@@ -4,6 +4,7 @@ import {
   Controller,
   Delete,
   Get,
+  Logger,
   Param,
   ParseIntPipe,
   Patch,
@@ -36,6 +37,8 @@ import { GetUser } from '../auth/get-user.decorator';
 @Controller('schedules')
 @UseGuards(AuthGuard())
 export class SchedulesController {
+  private logger = new Logger('SchedulesController');
+
   constructor(private schedulesService: SchedulesService) {}
 
   @Get()
@@ -43,6 +46,11 @@ export class SchedulesController {
     @Query(ValidationPipe) filterDto: GetSchedulesFilterDto,
     @GetUser() user: User,
   ): Promise<Schedule[]> {
+    this.logger.verbose(
+      `User: ${
+        user.username
+      } retrieving all schedules. Filters: ${JSON.stringify(filterDto)}`,
+    );
     return this.schedulesService.getSchedules(filterDto, user);
   }
 
@@ -60,6 +68,11 @@ export class SchedulesController {
     @Body() createScheduleDto: CreateScheduleDto,
     @GetUser() user: User,
   ): Promise<Schedule> {
+    this.logger.verbose(
+      `User: ${user.username} creating a new schedule. Data: ${JSON.stringify(
+        createScheduleDto,
+      )}`,
+    );
     return this.schedulesService.createSchedule(createScheduleDto, user);
   }
 

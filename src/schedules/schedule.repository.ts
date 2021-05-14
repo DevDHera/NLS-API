@@ -1,4 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm';
+import { InternalServerErrorException, Logger } from '@nestjs/common';
+
 import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { GetSchedulesFilterDto } from './dto/get-schedules-filter.dto';
 import { ScheduleStatus } from './schedule-status.enums';
@@ -7,6 +9,8 @@ import { User } from '../auth/user.entity';
 
 @EntityRepository(Schedule)
 export class ScheduleRepository extends Repository<Schedule> {
+  private logger = new Logger('ScheduleRepository');
+
   async getSchedules(
     filterDto: GetSchedulesFilterDto,
     user: User,
@@ -27,8 +31,18 @@ export class ScheduleRepository extends Repository<Schedule> {
       );
     }
 
-    const schedules = await query.getMany();
-    return schedules;
+    try {
+      const schedules = await query.getMany();
+      return schedules;
+    } catch (error) {
+      this.logger.error(
+        `Failed to get schedules for user: ${
+          user.username
+        }. DTO: ${JSON.stringify(filterDto)}`,
+        error.stack,
+      );
+      throw new InternalServerErrorException();
+    }
   }
 
   async createSchedule(
@@ -42,7 +56,18 @@ export class ScheduleRepository extends Repository<Schedule> {
     schedule.title = title;
     schedule.status = ScheduleStatus.INITIATED;
     schedule.user = user;
-    await schedule.save();
+
+    try {
+      await schedule.save();
+    } catch (error) {
+      this.logger.error(
+        `Failed to create a schedule for user: ${
+          user.username
+        }. Data: ${JSON.stringify(createScheduleDto)}`,
+        error.stack,
+      );
+      throw new InternalServerErrorException();
+    }
 
     delete schedule.user;
 
