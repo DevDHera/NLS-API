@@ -6,6 +6,7 @@ import * as config from 'config';
 
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { JwtStrategy } from './jwt.strategy';
 import { UserRepository } from './user.repository';
 
 const jwtConfig = config.get('jwt');
@@ -22,6 +23,7 @@ const jwtConfig = config.get('jwt');
     PassportModule.register({ defaultStrategy: 'jwt' }),
   ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, JwtStrategy],
+  exports: [JwtStrategy, PassportModule],
 })
 export class AuthModule {}
