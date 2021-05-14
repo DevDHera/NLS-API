@@ -8,7 +8,7 @@ import {
   Unique,
 } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
-import { Schedule } from 'src/schedules/schedule.entity';
+import { Schedule } from '../schedules/schedule.entity';
 
 @Entity()
 @Unique(['username'])
