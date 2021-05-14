@@ -1,0 +1,63 @@
+version: 2.1
+
+executors:
+  app-executor:
+    docker:
+      - image: circleci/node:15.9.0
+    working_directory: ~/repo
+
+aliases:
+  - &show-current-branch-name
+    run:
+      name: Show current branch
+      command: echo ${CIRCLE_BRANCH}
+  - &restore-cache
+    restore_cache:
+      keys:
+        - app-{{ checksum "package.json" }}
+        - app-
+  - &install-dependencies
+    run:
+      name: Install dependencies
+      command: npm install
+  - &save-cache
+    save_cache:
+      paths:
+        - node_modules
+      key: app-{{ checksum "package.json" }}  
+  - &run-tests
+    run:
+      name: Run tests
+      command: |
+        npm install
+        npm test
+jobs:
+  build:
+    executor: app-executor
+    steps:
+      - checkout
+      - *show-current-branch-name
+      - *restore-cache
+      - *install-dependencies
+      - *save-cache
+
+  ci-test:
+    executor: app-executor
+    steps:
+      - checkout
+      - *show-current-branch-name
+      - *install-aws-cli
+      - *run-tests
+workflows:
+  build-and-test:
+    jobs:
+      - build
+      - ci-test:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - dev
+                - stg
+                - main
