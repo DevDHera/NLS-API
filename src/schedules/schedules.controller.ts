@@ -41,13 +41,17 @@ export class SchedulesController {
   @Get()
   getSchedules(
     @Query(ValidationPipe) filterDto: GetSchedulesFilterDto,
+    @GetUser() user: User,
   ): Promise<Schedule[]> {
-    return this.schedulesService.getSchedules(filterDto);
+    return this.schedulesService.getSchedules(filterDto, user);
   }
 
   @Get('/:id')
-  getScheduleById(@Param('id', ParseIntPipe) id: number): Promise<Schedule> {
-    return this.schedulesService.getScheduleById(id);
+  getScheduleById(
+    @Param('id', ParseIntPipe) id: number,
+    @GetUser() user: User,
+  ): Promise<Schedule> {
+    return this.schedulesService.getScheduleById(id, user);
   }
 
   @Post()
@@ -60,15 +64,19 @@ export class SchedulesController {
   }
 
   @Delete('/:id')
-  deleteSchedule(@Param('id', ParseIntPipe) id: number): Promise<void> {
-    return this.schedulesService.deleteSchedule(id);
+  deleteSchedule(
+    @Param('id', ParseIntPipe) id: number,
+    @GetUser() user: User,
+  ): Promise<void> {
+    return this.schedulesService.deleteSchedule(id, user);
   }
 
   @Patch('/:id/status')
   updateScheduleStatus(
     @Param('id', ParseIntPipe) id: number,
     @Body('status', ScheduleStatusValidationPipe) status: ScheduleStatus,
+    @GetUser() user: User,
   ): Promise<Schedule> {
-    return this.schedulesService.updateScheduleStatus(id, status);
+    return this.schedulesService.updateScheduleStatus(id, status, user);
   }
 }

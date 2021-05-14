@@ -7,9 +7,14 @@ import { User } from '../auth/user.entity';
 
 @EntityRepository(Schedule)
 export class ScheduleRepository extends Repository<Schedule> {
-  async getSchedules(filterDto: GetSchedulesFilterDto): Promise<Schedule[]> {
+  async getSchedules(
+    filterDto: GetSchedulesFilterDto,
+    user: User,
+  ): Promise<Schedule[]> {
     const { search, status } = filterDto;
     const query = this.createQueryBuilder('schedule');
+
+    query.where('schedule.userId = :userId', { userId: user.id });
 
     if (status) {
       query.andWhere('schedule.status = :status', { status });
