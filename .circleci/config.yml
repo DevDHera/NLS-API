@@ -54,9 +54,3 @@ workflows:
       - ci-test:
           requires:
             - build
-          filters:
-            branches:
-              only:
-                - dev
-                - stg
-                - main

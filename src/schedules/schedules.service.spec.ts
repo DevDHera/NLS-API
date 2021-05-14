@@ -5,7 +5,7 @@ import { GetSchedulesFilterDto } from './dto/get-schedules-filter.dto';
 import { ScheduleStatus } from './schedule-status.enums';
 import { NotFoundException } from '@nestjs/common';
 
-const mockUser = { id: 12, username: 'Test user' };
+const mockUser = { id: 12, email: 'test01@nibm.lk' };
 
 const mockScheduleRepository = () => ({
   getSchedules: jest.fn(),

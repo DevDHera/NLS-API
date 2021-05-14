@@ -8,7 +8,7 @@ import { User } from './user.entity';
 import * as bcrypt from 'bcryptjs';
 
 const mockCredentialsDto = {
-  username: 'TestUsername',
+  email: 'test01@nibm.lk',
   password: 'TestPassword',
 };
 
@@ -36,14 +36,14 @@ describe('UserRepository', () => {
       expect(userRepository.signUp(mockCredentialsDto)).resolves.not.toThrow();
     });
 
-    it('throws a conflict exception as username already exists', async () => {
+    it('throws a conflict exception as email already exists', async () => {
       save.mockRejectedValue({ code: '23505' });
       await expect(userRepository.signUp(mockCredentialsDto)).rejects.toThrow(
         ConflictException,
       );
     });
 
-    it('throws a conflict exception as username already exists', async () => {
+    it('throws a conflict exception as email already exists', async () => {
       save.mockRejectedValue({ code: '123123' }); // unhandled error code
       await expect(userRepository.signUp(mockCredentialsDto)).rejects.toThrow(
         InternalServerErrorException,
@@ -57,18 +57,18 @@ describe('UserRepository', () => {
     beforeEach(() => {
       userRepository.findOne = jest.fn();
       user = new User();
-      user.username = 'TestUsername';
+      user.email = 'test01@nibm.lk';
       user.validatePassword = jest.fn();
     });
 
-    it('returns the username as validation is successful', async () => {
+    it('returns the email as validation is successful', async () => {
       userRepository.findOne.mockResolvedValue(user);
       user.validatePassword.mockResolvedValue(true);
 
       const result = await userRepository.validateUserPassword(
         mockCredentialsDto,
       );
-      expect(result).toEqual('TestUsername');
+      expect(result).toEqual('test01@nibm.lk');
     });
 
     it('returns null as user cannot be found', async () => {

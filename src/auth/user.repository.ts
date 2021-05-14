@@ -15,10 +15,12 @@ import { User } from './user.entity';
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
   async signUp(authCredentialsDto: AuthCredentialsDto): Promise<void> {
-    const { username, password } = authCredentialsDto;
+    const { email, firstName, lastName, password } = authCredentialsDto;
 
     const user = this.create();
-    user.username = username;
+    user.email = email;
+    user.firstName = firstName;
+    user.lastName = lastName;
     user.salt = await bcrypt.genSalt();
     user.password = await this.hashPassword(password, user.salt);
 
@@ -26,8 +28,8 @@ export class UserRepository extends Repository<User> {
       await user.save();
     } catch (error) {
       if (error.code === '23505') {
-        // duplicate username
-        throw new ConflictException('Username already exists');
+        // duplicate email
+        throw new ConflictException('Email already exists');
       } else {
         throw new InternalServerErrorException();
       }
@@ -37,11 +39,11 @@ export class UserRepository extends Repository<User> {
   async validateUserPassword(
     authCredentialsDto: AuthCredentialsDto,
   ): Promise<string> {
-    const { username, password } = authCredentialsDto;
-    const user = await this.findOne({ username });
+    const { email, password } = authCredentialsDto;
+    const user = await this.findOne({ email });
 
     if (user && (await user.validatePassword(password))) {
-      return user.username;
+      return user.email;
     } else {
       return null;
     }
