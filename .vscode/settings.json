@@ -4,6 +4,7 @@
         "base",
         "orm",
         "auth",
-        "ci/cd"
+        "ci/cd",
+        "notifications"
     ]
 }
