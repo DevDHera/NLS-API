@@ -10,6 +10,7 @@ import {
 // schemas
 import { ScheduleStatus } from './schedule-status.enums';
 import { User } from '../auth/user.entity';
+import { HallType } from './hall-type.enums';
 
 @Entity()
 export class Schedule extends BaseEntity {
@@ -20,7 +21,19 @@ export class Schedule extends BaseEntity {
   scheduledDate: Date;
 
   @Column()
-  title: string;
+  endDate: Date;
+
+  @Column()
+  module: string;
+
+  @Column()
+  batch: string;
+
+  @Column()
+  hall: string;
+
+  @Column()
+  hallType: HallType;
 
   @Column()
   status: ScheduleStatus;

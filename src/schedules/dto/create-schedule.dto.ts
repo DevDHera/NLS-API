@@ -1,7 +1,8 @@
 // core
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsDate, IsNotEmpty } from 'class-validator';
+import { IsDate, IsEnum, IsNotEmpty } from 'class-validator';
+import { HallType } from '../hall-type.enums';
 
 export class CreateScheduleDto {
   @ApiProperty()
@@ -12,5 +13,24 @@ export class CreateScheduleDto {
 
   @ApiProperty()
   @IsNotEmpty()
-  title: string;
+  @IsDate()
+  @Type(() => Date)
+  endDate: Date;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  module: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  batch: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  hall: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsEnum(HallType)
+  hallType: HallType;
 }

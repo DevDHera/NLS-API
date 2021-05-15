@@ -26,7 +26,7 @@ export class ScheduleRepository extends Repository<Schedule> {
 
     if (search) {
       query.andWhere(
-        '(schedule.title LIKE :search OR schedule.scheduledDate LIKE :search)',
+        '(schedule.module LIKE :search OR schedule.scheduledDate LIKE :search)',
         { search: `%${search}%` },
       );
     }
@@ -49,11 +49,22 @@ export class ScheduleRepository extends Repository<Schedule> {
     createScheduleDto: CreateScheduleDto,
     user: User,
   ): Promise<Schedule> {
-    const { scheduledDate, title } = createScheduleDto;
+    const {
+      scheduledDate,
+      endDate,
+      module,
+      hall,
+      batch,
+      hallType,
+    } = createScheduleDto;
 
     const schedule = new Schedule();
     schedule.scheduledDate = scheduledDate;
-    schedule.title = title;
+    schedule.endDate = endDate;
+    schedule.module = module;
+    schedule.batch = batch;
+    schedule.hall = hall;
+    schedule.hallType = hallType;
     schedule.status = ScheduleStatus.INITIATED;
     schedule.user = user;
 
