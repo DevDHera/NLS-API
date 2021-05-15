@@ -50,7 +50,7 @@ describe('ScheduleService', () => {
   describe('getScheduleById', () => {
     it('calls scheduleRepository.findOne() and successfully retrieve and return the schedule', async () => {
       const mockSchedule = {
-        title: 'Test schedule',
+        module: 'Test schedule',
         scheduledDate: '2021-05-04',
       };
       scheduleRepository.findOne.mockResolvedValue(mockSchedule);
@@ -80,7 +80,7 @@ describe('ScheduleService', () => {
 
       expect(scheduleRepository.createSchedule).not.toHaveBeenCalled();
       const createScheduleDto = {
-        title: 'Test schedule',
+        module: 'Test schedule',
         scheduledDate: '2021-05-04',
       };
       const result = await schedulesService.createSchedule(
