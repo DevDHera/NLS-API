@@ -5,6 +5,7 @@
         "orm",
         "auth",
         "ci/cd",
-        "notifications"
+        "notifications",
+        "labs"
     ]
 }

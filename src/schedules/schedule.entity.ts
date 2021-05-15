@@ -4,6 +4,7 @@ import {
   Column,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -11,6 +12,7 @@ import {
 import { ScheduleStatus } from './schedule-status.enums';
 import { User } from '../auth/user.entity';
 import { HallType } from './hall-type.enums';
+import { Lab } from '../labs/lab.entity';
 
 @Entity()
 export class Schedule extends BaseEntity {
@@ -43,4 +45,7 @@ export class Schedule extends BaseEntity {
 
   @Column()
   userId: number;
+
+  @OneToMany((type) => Lab, (lab) => lab.user, { eager: true })
+  labs: Lab[];
 }
