@@ -4,6 +4,8 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { Logger } from '@nestjs/common';
 import * as config from 'config';
 
+import webpush from './utils/webpush';
+
 // modules
 import { AppModule } from './app.module';
 
@@ -20,6 +22,9 @@ async function bootstrap() {
   if (process.env.NODE_ENV === 'development') {
     app.enableCors();
   }
+
+  // webpush
+  webpush();
 
   // add global api prefix
   app.setGlobalPrefix('api/v1');
