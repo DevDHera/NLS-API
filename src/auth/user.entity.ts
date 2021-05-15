@@ -10,6 +10,7 @@ import {
 import * as bcrypt from 'bcryptjs';
 import { Schedule } from '../schedules/schedule.entity';
 import { Notification } from '../notifications/notification.entity';
+import { Lab } from '../labs/lab.entity';
 
 @Entity()
 @Unique(['email'])
@@ -37,6 +38,9 @@ export class User extends BaseEntity {
 
   @OneToMany((type) => Notification, (n) => n.user, { eager: true })
   notifications: Notification[];
+
+  @OneToMany((type) => Lab, (lab) => lab.user, { eager: true })
+  labs: Lab[];
 
   async validatePassword(password: string): Promise<boolean> {
     const hash = await bcrypt.hash(password, this.salt);
