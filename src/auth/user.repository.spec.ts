@@ -61,14 +61,15 @@ describe('UserRepository', () => {
       user.validatePassword = jest.fn();
     });
 
-    it('returns the email as validation is successful', async () => {
+    it('returns the user as validation is successful', async () => {
       userRepository.findOne.mockResolvedValue(user);
       user.validatePassword.mockResolvedValue(true);
 
       const result = await userRepository.validateUserPassword(
         mockCredentialsDto,
       );
-      expect(result).toEqual('test01@nibm.lk');
+
+      expect(result.email).toEqual('test01@nibm.lk');
     });
 
     it('returns null as user cannot be found', async () => {
