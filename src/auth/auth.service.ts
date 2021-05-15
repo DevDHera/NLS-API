@@ -30,7 +30,7 @@ export class AuthService {
       authCredentialsDto,
     );
 
-    if (!user && !user.email) {
+    if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
